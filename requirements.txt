@@ -3,4 +3,4 @@ matplotlib
 seaborn
 numpy
 ipywidgets
-IPython.display
+IPython
