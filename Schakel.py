@@ -132,6 +132,7 @@ def plot():
     ax[1].set_ylabel("Voorraad [stuks]")
     ax[0].legend()
     ax[1].legend()
+    plt.tight_layout()
     plt.show()
 
     # %% visualiseren vraagvoorspelling
@@ -151,4 +152,5 @@ def plot():
     plt.title("Fasediagram voorraad en pijplijn", fontweight="bold")
     plt.xlabel("Voorraad [stuks]")
     plt.ylabel("Pijplijn [stuks]")
+    plt.tight_layout()
     plt.show()
