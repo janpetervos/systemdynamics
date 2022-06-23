@@ -6,7 +6,8 @@ from ipywidgets import VBox, Label, Layout
 from IPython.display import display
 
 # instellen opmaak visualisaties
-sns.set(style="whitegrid", rc={"figure.figsize": (8, 4)}, font="Arial", font_scale=1.0)
+# sns.set(style="whitegrid", rc={"figure.figsize": (8, 4)}, font="Arial", font_scale=1.0)
+sns.set(style="whitegrid", rc={"figure.figsize": (8, 4)}, font_scale=1.0)
 kleur = ["#EC5D57", "#51A7F9", "#70BF41", "#F39019", "#F5D327", "#AA64D6"]  # rood, blauw, groen, oranje, geel, paars
 sns.set_palette(kleur)
 
@@ -120,34 +121,28 @@ def plot():
     voorraad_eindproducten, pijplijn_eindproducten, voorspelling_eindproducten = stocks
     totale_voorraad = voorraad_eindproducten + pijplijn_eindproducten
 
-    # %% visualiseren voorraadniveaus
-    fig1, ax = plt.subplots(2, 1, figsize=(8, 8), sharex="all")
+    # %% visualiseren voorraadniveaus en vraagvoorspelling
+    fig1, ax = plt.subplots(3, 1, figsize=(8, 12), sharex="all")
     ax[0].plot(t, voorraad_eindproducten, label="Voorraad")
     ax[0].plot(t, pijplijn_eindproducten, color=kleur[1], label="Pijplijn")
     ax[1].plot(t, totale_voorraad, color=kleur[3], label="Totale voorraad")
+    ax[2].plot(t, orders, color=kleur[5], label="Vraag")
+    ax[2].plot(t, voorspelling_eindproducten, color=kleur[2], label="Voorspelling")
     ax[0].set_title("Tijdsverloop eindvoorraad en pijplijnvoorraad", fontweight="bold")
     ax[1].set_title("Tijdsverloop totale voorraad in de distributieketen", fontweight="bold")
-    ax[1].set_xlabel("Tijd [week]")
+    ax[2].set_title("Tijdsverloop vraag en vraagvoorspelling", fontweight="bold")
+    ax[2].set_xlabel("Tijd [week]")
     ax[0].set_ylabel("Voorraad [stuks]")
     ax[1].set_ylabel("Voorraad [stuks]")
+    ax[2].set_ylabel("Vraag [stuks/week]")
     ax[0].legend()
     ax[1].legend()
-    plt.tight_layout()
-    plt.show()
-
-    # %% visualiseren vraagvoorspelling
-    fig2 = plt.figure(figsize=(7.3, 4))
-    plt.plot(t, orders, label="Vraag")
-    plt.plot(t, voorspelling_eindproducten, label="Voorspelling")
-    plt.title("Tijdsverloop vraag en vraagvoorspelling", fontname="Avenir Next")
-    plt.xlabel("Tijd [week]")
-    plt.ylabel("Vraag [stuks]")
-    plt.legend(loc="best")
+    ax[2].legend()
     plt.tight_layout()
     plt.show()
 
     # %% visualiseren fasediagram
-    fig3 = plt.figure(figsize=(4, 4))
+    fig2 = plt.figure(figsize=(4, 4))
     plt.plot(voorraad_eindproducten, pijplijn_eindproducten, color=kleur[2])
     plt.title("Fasediagram voorraad en pijplijn", fontweight="bold")
     plt.xlabel("Voorraad [stuks]")

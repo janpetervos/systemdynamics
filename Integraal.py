@@ -6,7 +6,8 @@ from ipywidgets import VBox, Label, Layout
 from IPython.display import display
 
 # instellen opmaak visualisaties
-sns.set(style="whitegrid", rc={"figure.figsize": (8, 4)}, font="Arial", font_scale=1.0)
+# sns.set(style="whitegrid", rc={"figure.figsize": (8, 4)}, font="Arial", font_scale=1.0)
+sns.set(style="whitegrid", rc={"figure.figsize": (8, 4)}, font_scale=1.0)
 kleur = ["#EC5D57", "#51A7F9", "#70BF41", "#F39019", "#F5D327", "#AA64D6"]  # rood, blauw, groen, oranje, geel, paars
 sns.set_palette(kleur)
 
@@ -170,14 +171,14 @@ def plot():
 
     # %% visualiseren vraag
     fig4 = plt.figure()
-    plt.title("Tijdsverloop eindvraag", fontweight="bold")
+    plt.title("Tijdsverloop eindvraag en leveringen", fontweight="bold")
     if vraagtoename:
         plt.plot(t, orders_met_vraagtoename, color=kleur[5], label="Eindvraag")
     else:
         plt.plot(t, orders, color=kleur[5], label="Eindvraag")
     plt.plot(t, voorraad_eindproducten/levertijd_eindproducten, color=kleur[2], label="Leveringen")
     plt.xlabel("Tijd [week]")
-    plt.ylabel("Eindvraag [stuks/week]")
+    plt.ylabel("Eindproducten [stuks/week]")
     plt.legend(loc="best")
     plt.tight_layout()
     plt.show()
