@@ -137,49 +137,28 @@ def plot():
     backlog, voorraad_eindproducten, voorraad_componenten, voorraad_onderdelen = stocks
     totale_voorraad = voorraad_eindproducten + voorraad_componenten + voorraad_onderdelen
 
-    # %% visualiseren backlog
-    fig1, ax = plt.subplots()
-    plt.title("Tijdsverloop backlog", fontweight="bold")
-    plt.plot(t, backlog, label="Backlog")
-    plt.xlabel("Tijd [week]")
-    plt.ylabel("Voorraad [stuks]")
-    plt.legend(loc="best")
-    plt.tight_layout()
-    plt.show()
-
-    # %% visualiseren voorraden
-    fig2, ax = plt.subplots()
-    plt.title("Tijdsverloop voorraden in de distributieketen", fontweight="bold")
-    plt.plot(t, voorraad_eindproducten, label="Eindproducten")
-    plt.plot(t, voorraad_componenten, label="Componenten")
-    plt.plot(t, voorraad_onderdelen, label="Onderdelen")
-    plt.xlabel("Tijd [week]")
-    plt.ylabel("Voorraad [stuks]")
-    plt.legend(loc="best")
-    plt.tight_layout()
-    plt.show()
-
-    # %% visualiseren totale voorraad
-    fig3 = plt.figure()
-    plt.title("Tijdsverloop totale voorraad in de distributieketen", fontweight="bold")
-    plt.plot(t, totale_voorraad, color=kleur[3], label="Totale voorraad")
-    plt.xlabel("Tijd [week]")
-    plt.ylabel("Voorraad [stuks]")
-    plt.legend(loc="best")
-    plt.tight_layout()
-    plt.show()
-
-    # %% visualiseren vraag
-    fig4 = plt.figure()
-    plt.title("Tijdsverloop eindvraag en leveringen", fontweight="bold")
+    # %% visualiseren stocks en flows
+    fig1, ax = plt.subplots(4, 1, figsize=(8, 16), sharex="all")
+    ax[0].set_title("Tijdsverloop backlog", fontweight="bold")
+    ax[1].set_title("Tijdsverloop voorraden in de distributieketen", fontweight="bold")
+    ax[2].set_title("Tijdsverloop totale voorraad in de distributieketen", fontweight="bold")
+    ax[3].set_title("Tijdsverloop eindvraag en leveringen", fontweight="bold")
+    ax[0].plot(t, backlog, label="Backlog")
+    ax[1].plot(t, voorraad_eindproducten, label="Eindproducten")
+    ax[1].plot(t, voorraad_componenten, label="Componenten")
+    ax[1].plot(t, voorraad_onderdelen, label="Onderdelen")
+    ax[2].plot(t, totale_voorraad, color=kleur[3], label="Totale voorraad")
     if vraagtoename:
-        plt.plot(t, orders_met_vraagtoename, color=kleur[5], label="Eindvraag")
+        ax[3].plot(t, orders_met_vraagtoename, color=kleur[5], label="Eindvraag")
     else:
-        plt.plot(t, orders, color=kleur[5], label="Eindvraag")
-    plt.plot(t, voorraad_eindproducten/levertijd_eindproducten, color=kleur[2], label="Leveringen")
-    plt.xlabel("Tijd [week]")
-    plt.ylabel("Eindproducten [stuks/week]")
-    plt.legend(loc="best")
+        ax[3].plot(t, orders, color=kleur[5], label="Eindvraag")
+    ax[3].plot(t, voorraad_eindproducten/levertijd_eindproducten, color=kleur[2], label="Leveringen")
+    ax[3].set_xlabel("Tijd [week]")
+    for i in range(2):
+        ax[i].set_ylabel("Voorraad [stuks]")
+    ax[3].set_ylabel("Eindproducten [stuks/week]")
+    for axi in ax.flat:
+        axi.legend(loc="best")
     plt.tight_layout()
     plt.show()
 
