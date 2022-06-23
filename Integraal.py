@@ -18,7 +18,8 @@ t = np.linspace(0, st, n)  # x-as voor eventuele tijdplots
 
 # instellen exogene vraag
 orders = np.ones(n) * 100
-orders[int(10 / dt):] = 200
+orders_met_vraagtoename = np.ones(n) * 100
+orders_met_vraagtoename[int(10 / dt):] = 200
 
 
 def Euler(f, x0, t, args=None):  # integrator
@@ -33,7 +34,7 @@ def Euler(f, x0, t, args=None):  # integrator
 def S(stocks, t, args):  # systeem
 
     # uitpakken parameters
-    levertijd_eindproducten, levertijd_componenten, levertijd_onderdelen, levertijd_grondstoffen = args
+    vraagtoename, levertijd_eindproducten, levertijd_componenten, levertijd_onderdelen, levertijd_grondstoffen = args
 
     # uitpakken "stocks"
     backlog, voorraad_eindproducten, voorraad_componenten, voorraad_onderdelen = stocks
@@ -42,7 +43,10 @@ def S(stocks, t, args):  # systeem
     levering_eindproducten = min(voorraad_eindproducten, backlog) / levertijd_eindproducten
 
     # berekenen "flows" backlog
-    orders_klanten = orders[int(t/dt)]
+    if vraagtoename:
+        orders_klanten = orders_met_vraagtoename[int(t/dt)]
+    else:
+        orders_klanten = orders[int(t/dt)]
     verwerkte_orders = levering_eindproducten
 
     # berekenen "flows" voorraad componenten
@@ -58,6 +62,12 @@ def S(stocks, t, args):  # systeem
 
 # instellen beginvoorwaarden voorraad, pijplijn en voorspelling
 S0 = [1200., 300., 300., 300.]
+
+# interface voor aan- of uitzetten vraagtoename
+vraag_button = widgets.Checkbox(
+    value=False,
+    description="Vraagtoename",
+    icon='check')
 
 # interface voor de levertijd van eindproducten
 style = {'description_width': 'initial'}
@@ -105,19 +115,23 @@ levertijd_grondstoffen_slider = widgets.IntSlider(
     readout_format="d")
 
 # instellen user interface
-tab1 = VBox(children=[levertijd_eindproducten_slider, levertijd_componenten_slider, levertijd_onderdelen_slider, levertijd_grondstoffen_slider])
-tab = widgets.Tab(children=[tab1])
-tab.set_title(0, "Levertijden")
+label_layout = Layout(width='600px',height='30px')
+tab1 = VBox([Label("Stijging van de exogene vraag op t= 10 van 100 naar 200 stuks per week",layout=label_layout), vraag_button])
+tab2 = VBox(children=[levertijd_eindproducten_slider, levertijd_componenten_slider, levertijd_onderdelen_slider, levertijd_grondstoffen_slider])
+tab = widgets.Tab(children=[tab1, tab2])
+tab.set_title(0, "Vraagtoename")
+tab.set_title(1, "Levertijden")
 display(tab)
 
 # uitvoeren simulatie en visualiseren resultaten
 @widgets.interact_manual()
 def plot():
+    vraagtoename = vraag_button.value
     levertijd_eindproducten = levertijd_eindproducten_slider.value
     levertijd_componenten = levertijd_componenten_slider.value
     levertijd_onderdelen =  levertijd_onderdelen_slider.value
     levertijd_grondstoffen = levertijd_grondstoffen_slider.value
-    parameters = (levertijd_eindproducten, levertijd_componenten, levertijd_onderdelen, levertijd_grondstoffen)
+    parameters = (vraagtoename, levertijd_eindproducten, levertijd_componenten, levertijd_onderdelen, levertijd_grondstoffen)
     stocks = Euler(S, S0, t, args=parameters)
     backlog, voorraad_eindproducten, voorraad_componenten, voorraad_onderdelen = stocks
     totale_voorraad = voorraad_eindproducten + voorraad_componenten + voorraad_onderdelen
@@ -134,7 +148,7 @@ def plot():
 
     # %% visualiseren voorraden
     fig2, ax = plt.subplots()
-    plt.title("Tijdsverloop eindvoorraden in de distributieketen", fontweight="bold")
+    plt.title("Tijdsverloop voorraden in de distributieketen", fontweight="bold")
     plt.plot(t, voorraad_eindproducten, label="Eindproducten")
     plt.plot(t, voorraad_componenten, label="Componenten")
     plt.plot(t, voorraad_onderdelen, label="Onderdelen")
@@ -154,8 +168,22 @@ def plot():
     plt.tight_layout()
     plt.show()
 
+    # %% visualiseren vraag
+    fig4 = plt.figure()
+    plt.title("Tijdsverloop eindvraag", fontweight="bold")
+    if vraagtoename:
+        plt.plot(t, orders_met_vraagtoename, color=kleur[5], label="Eindvraag")
+    else:
+        plt.plot(t, orders, color=kleur[5], label="Eindvraag")
+    plt.plot(t, voorraad_eindproducten/levertijd_eindproducten, color=kleur[2], label="Leveringen")
+    plt.xlabel("Tijd [week]")
+    plt.ylabel("Eindvraag [stuks/week]")
+    plt.legend(loc="best")
+    plt.tight_layout()
+    plt.show()
+
     # %% visualiseren fasediagrammen van schakels in de distributieketen
-    fig4, ax = plt.subplots(1, 3, figsize=(12, 4))
+    fig5, ax = plt.subplots(1, 3, figsize=(12, 4))
     ax[0].plot(voorraad_eindproducten, voorraad_componenten, color=kleur[0])
     ax[1].plot(voorraad_eindproducten, voorraad_onderdelen, color=kleur[1])
     ax[2].plot(voorraad_componenten, voorraad_onderdelen, color=kleur[2])
