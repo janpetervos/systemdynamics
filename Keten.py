@@ -97,7 +97,8 @@ def S(stocks, t, args):  # systeem
                      instroom_grondstoffen - instroom_onderdelen,
                      vraagverandering_onderdelen])
 
-# instellen beginvoorwaarden voorraad, pijplijn en voorspelling
+
+# instellen beginvoorwaarden voorraad, pijplijn en voorspelling van de drie schakels in de distributieketen
 S0 = [400., 300., 100., 400., 300., 100., 400., 300., 100.]
 
 # besluitvormingsstrategie

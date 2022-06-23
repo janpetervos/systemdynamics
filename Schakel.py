@@ -128,6 +128,7 @@ def plot():
     ax[1].plot(t, totale_voorraad, color=kleur[3], label="Totale voorraad")
     ax[2].plot(t, orders, color=kleur[5], label="Vraag")
     ax[2].plot(t, voorspelling_eindproducten, color=kleur[2], label="Voorspelling")
+    # ax[2].plot(t, np.minimum(orders, voorraad_eindproducten/levertijd_eindproducten), color=kleur[1], linestyle="--", label="Leveringen")
     ax[0].set_title("Tijdsverloop eindvoorraad en pijplijnvoorraad", fontweight="bold")
     ax[1].set_title("Tijdsverloop totale voorraad in de distributieketen", fontweight="bold")
     ax[2].set_title("Tijdsverloop vraag en vraagvoorspelling", fontweight="bold")

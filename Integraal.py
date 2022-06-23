@@ -61,7 +61,7 @@ def S(stocks, t, args):  # systeem
     return np.array([orders_klanten - verwerkte_orders, levering_componenten - levering_eindproducten,  levering_onderdelen - levering_componenten, levering_grondstoffen - levering_onderdelen])
 
 
-# instellen beginvoorwaarden voorraad, pijplijn en voorspelling
+# instellen beginvoorwaarden backlog, eindproducten, componenten en onderdelen
 S0 = [1200., 300., 300., 300.]
 
 # interface voor aan- of uitzetten vraagtoename
