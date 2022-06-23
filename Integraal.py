@@ -127,12 +127,16 @@ display(tab)
 # uitvoeren simulatie en visualiseren resultaten
 @widgets.interact_manual()
 def plot():
+
+    # vanuit interface vaststellen waarde variabelen
     vraagtoename = vraag_button.value
     levertijd_eindproducten = levertijd_eindproducten_slider.value
     levertijd_componenten = levertijd_componenten_slider.value
     levertijd_onderdelen =  levertijd_onderdelen_slider.value
     levertijd_grondstoffen = levertijd_grondstoffen_slider.value
     parameters = (vraagtoename, levertijd_eindproducten, levertijd_componenten, levertijd_onderdelen, levertijd_grondstoffen)
+
+    # uitvoeren numeriek integratieproces
     stocks = Euler(S, S0, t, args=parameters)
     backlog, voorraad_eindproducten, voorraad_componenten, voorraad_onderdelen = stocks
     totale_voorraad = voorraad_eindproducten + voorraad_componenten + voorraad_onderdelen

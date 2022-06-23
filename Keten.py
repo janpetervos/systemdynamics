@@ -199,6 +199,8 @@ display(tab)
 # uitvoeren simulatie en visualiseren resultaten
 @widgets.interact_manual()
 def plot():
+
+    # vanuit interface vaststellen waarde variabelen
     strategie = strategie_button.value
     aanpassingstijd_pijplijn_eindproducten = aanpassingstijd_pijplijn_eindproducten_slider.value
     aanpassingstijd_pijplijn_componenten = aanpassingstijd_pijplijn_componenten_slider.value
@@ -207,6 +209,8 @@ def plot():
     voorspellingshorizon_componenten = voorspellingshorizon_componenten_slider.value
     voorspellingshorizon_onderdelen = voorspellingshorizon_onderdelen_slider.value
     parameters = (strategie, aanpassingstijd_pijplijn_eindproducten, aanpassingstijd_pijplijn_componenten, aanpassingstijd_pijplijn_onderdelen, voorspellingshorizon_eindproducten, voorspellingshorizon_componenten, voorspellingshorizon_onderdelen)
+
+    # uitvoeren numeriek integratieproces
     stocks = Euler(S, S0, t, args=parameters)
     voorraad_eindproducten, pijplijn_eindproducten, voorspelling_eindproducten, voorraad_componenten, pijplijn_componenten, voorspelling_componenten, voorraad_onderdelen, pijplijn_onderdelen, voorspelling_onderdelen = stocks
     totale_voorraad = voorraad_eindproducten + pijplijn_eindproducten + voorraad_componenten + pijplijn_componenten + voorraad_onderdelen + pijplijn_onderdelen

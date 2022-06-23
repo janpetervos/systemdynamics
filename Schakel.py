@@ -113,10 +113,14 @@ display(tab)
 # uitvoeren simulatie en visualiseren resultaten
 @widgets.interact_manual()
 def plot():
+
+    # vanuit interface vaststellen waarde variabelen
     strategie = strategie_button.value
     aanpassingstijd = aanpassingstijd_slider.value
     voorspellingshorizon = voorspellingshorizon_slider.value
     parameters = (strategie, aanpassingstijd, voorspellingshorizon)
+
+    # uitvoeren numeriek integratieproces
     stocks = Euler(S, S0, t, args=parameters)
     voorraad_eindproducten, pijplijn_eindproducten, voorspelling_eindproducten = stocks
     totale_voorraad = voorraad_eindproducten + pijplijn_eindproducten
